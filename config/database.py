@@ -22,7 +22,7 @@ def get_db():
 def close_db(e=None):
     # Cierra la conexión si existe al final de la petición
     db = g.pop('db', None)
-    if db is not in None:
+    if db is not None:
         db.close()
 
 def init_app_db(app):
