@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for
-from config.database import get_db_connection
+from config.database import get_db
 from src.controllers.recipe_controller import get_random_tip # Reutilizamos el generador de consejos
 
 # Creamos el Blueprint para los ingredientes
@@ -8,7 +8,7 @@ ingredients_bp = Blueprint('ingredients', __name__)
 # RUTA PARA LEER TODOS LOS INGREDIENTES (READ)
 @ingredients_bp.route('/ingredients')
 def list_ingredients():
-    conn = get_db_connection()
+    conn = get_db()
     cur = conn.cursor()
     cur.execute('SELECT id, nombre, unidad_medida_predeterminada FROM ingredientes ORDER BY nombre;')
     ingredients_raw = cur.fetchall()
@@ -26,7 +26,7 @@ def add_ingredient():
         nombre = request.form['nombre']
         unidad = request.form['unidad_medida']
 
-        conn = get_db_connection()
+        conn = get_db()
         cur = conn.cursor()
         # El UNIQUE en la tabla 'ingredientes' previene duplicados
         try:
@@ -47,7 +47,7 @@ def add_ingredient():
 # RUTAS PARA EDITAR UN INGREDIENTE (UPDATE)
 @ingredients_bp.route('/ingredient/edit/<int:id>', methods=['GET', 'POST'])
 def edit_ingredient(id):
-    conn = get_db_connection()
+    conn = get_db()
     cur = conn.cursor()
 
     if request.method == 'POST':
@@ -78,7 +78,7 @@ def edit_ingredient(id):
 # RUTA PARA BORRAR UN INGREDIENTE (DELETE)
 @ingredients_bp.route('/ingredient/delete/<int:id>', methods=['POST'])
 def delete_ingredient(id):
-    conn = get_db_connection()
+    conn = get_db()
     cur = conn.cursor()
     # Usamos un try-except porque si un ingrediente está en uso, podría dar error de clave foránea
     try:
