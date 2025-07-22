@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- El título será dinámico -->
+    <title>{% block title %}SazonAI{% endblock %}</title>
+    <!-- Enlace a nuestro archivo CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <nav class="navbar">
+        <a href="{{ url_for('recipes.dashboard') }}" class="logo">SazonAI 🍳</a>
+        <div class="nav-links">
+            <a href="{{ url_for('recipes.dashboard') }}">Recetas</a>
+            <!-- NUEVO ENLACE -->
+            <a href="{{ url_for('ingredients.list_ingredients') }}">Ingredientes</a>
+            <a href="{{ url_for('recipes.add_recipe') }}" class="btn btn-primary">Añadir receta</a>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- El contenido específico de cada página irá aquí -->
+        {% block content %}{% endblock %}
+
+        <div class="chef-tip">
+            <p><strong>Consejo del Chef:</strong> {{ consejo }}</p>
+        </div>
+    </main>
+</body>
+
+</html>

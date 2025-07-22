@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Gestionar Ingredientes - SazonAI{% endblock %}
+
+{% block content %}
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2>Ingredientes Disponibles</h2>
+        <a href="{{ url_for('ingredients.add_ingredient') }}" class="btn btn-primary">Añadir Ingrediente</a>
+    </div>
+
+    <table class="table-styled">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Unidad Predeterminada</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ingredient in ingredients %}
+            <tr>
+                <td>{{ ingredient.nombre }}</td>
+                <td>{{ ingredient.unidad }}</td>
+                <td class="action-buttons">
+                    <a href="{{ url_for('ingredients.edit_ingredient', id=ingredient.id) }}" class="btn btn-secondary">Editar</a>
+                    <form action="{{ url_for('ingredients.delete_ingredient', id=ingredient.id) }}" method="POST" onsubmit="return confirm('¿Seguro que quieres eliminar este ingrediente?');">
+                        <button type="submit" class="btn btn-danger">Borrar</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3">No hay ingredientes registrados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Pequeño estilo para la tabla, para no saturar el CSS principal -->
+    <style>
+        .table-styled { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .table-styled th, .table-styled td { padding: 12px; border: 1px solid #dee2e6; text-align: left; }
+        .table-styled thead { background-color: #e9ecef; }
+        .action-buttons { display: flex; gap: 5px; }
+    </style>
+{% endblock %}

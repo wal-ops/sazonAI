@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}{{ 'Editar' if ingredient else 'Añadir' }} Ingredientes - SazonAI{% endblock %}
+
+{% block content %}
+    <div class="form-container">
+        <h2>{{ 'Editar Ingrediente' if ingredient else 'Añadir Nuevo Ingrediente' }}</h2>
+        
+        <form method="POST">
+            <div class="form-group">
+                <label for="nombre">Nombre del ingrediente</label>
+                <input type="text" id="nombre" name="nombre" class="form-control" value="{{ ingredient.nombre if ingredient else '' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="unidad_medida">Unidad de medida predeterminada</label>
+                <input type="text" id="unidad_medida" name="unidad_medida" class="form-control" value="{{ ingredient.unidad if ingredient else '' }}" placeholder="Ej: gramos, ml, unidades">
+            </div>
+
+            <button type="submit" class="btn btn-primary">{{ 'Actualizar' if ingredient else 'Guardar' }} Ingrediente</button>
+        </form>
+    </div>
+{% endblock %}

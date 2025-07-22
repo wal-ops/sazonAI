@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}{{ recipe.nombre }} - SazonAI{% endblock %}
+
+{% block content %}
+<div class="recipe-detail-container">
+    <header class="recipe-header">
+        <h1>{{ recipe.nombre }}</h1>
+        <p class="author">Una creación de: {{ recipe.autor if recipe.autor else 'Usuario Desconocido' }}</p>
+    </header>
+
+    <p class="description">{{ recipe.descripcion }}</p>
+
+    <div class="details-grid">
+        <div class="ingredients-section">
+            <h3>Ingredientes</h3>
+            <ul>
+                {% for ingredient in ingredients %}
+                <li>{{ ingredient.cantidad }} {{ ingredient.unidad }} de {{ ingredient.nombre }}</li>
+                {% else %}
+                <li>Esta receta no tiene ingredientes listados.</li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="instructions-section">
+            <h3>Instrucciones</h3>
+            <p>{{ recipe.instrucciones }}</p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .recipe-detail-container {
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .recipe-header {
+        text-align: center;
+        border-bottom: 1px solid #dee2e6;
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+    }
+
+    .recipe-header h1 {
+        margin: 0;
+    }
+
+    .recipe-header .author {
+        font-style: italic;
+        color: #6c757d;
+    }
+
+    .description {
+        font-size: 1.1em;
+        line-height: 1.6;
+    }
+
+    .details-grid {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 40px;
+        margin-top: 30px;
+    }
+
+    .ingredients-section ul {
+        list-style-type: '🥣 ';
+        padding-left: 20px;
+    }
+
+    .instructions-section p {
+        white-space: pre-wrap;
+        line-height: 1.7;
+    }
+
+    @media (max-width: 768px) {
+        .details-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .instructions-section p {
+        /* ESTA LÍNEA ES LA MAGIA */
+        white-space: pre-wrap; /* Respeta los saltos de línea y los espacios */
+        line-height: 1.7;
+    }
+</style>
+{% endblock %}```

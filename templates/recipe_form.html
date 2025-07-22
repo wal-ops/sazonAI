@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+<!-- El título cambiará si estamos editando o creando -->
+{% block title %}{{ 'Editar' if recipe else 'Añadir' }} Receta - SazonAI{% endblock %}
+
+{% block content %}
+    <div class="form-container">
+        <h2>{{ 'Editar Receta' if recipe else 'Añadir Nueva Receta' }}</h2>
+        
+        <!-- El formulario enviará los datos a la URL actual (add o edit) -->
+        <form method="POST">
+            <div class="form-group">
+                <label for="nombre">Nombre de la Receta</label>
+                <input type="text" id="nombre" name="nombre" class="form-control" value="{{ recipe.nombre if recipe else '' }}" required>
+            </div>
+            <div class="form-group">
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" name="descripcion" class="form-control" required>{{ recipe.descripcion if recipe else '' }}</textarea>
+            </div>
+            <div class="form-group">
+                <label for="instrucciones">Instrucciones</label>
+                <textarea id="instrucciones" name="instrucciones" class="form-control" required>{{ recipe.instrucciones if recipe else '' }}</textarea>
+            </div>
+            
+            <!-- Asignar la receta a un usuario (aquí hardcodeado al usuario 1) -->
+            <input type="hidden" name="id_usuario" value="1">
+
+            <div class="form-group">
+                <label>Ingredientes</label>
+                <div class="ingredient-list">
+                    <!-- Iteramos sobre todos los ingredientes disponibles -->
+                    {% for ingredient in all_ingredients %}
+                    <label>
+                        <!-- Si estamos editando, marcamos los ingredientes que ya tiene la receta -->
+                        <input type="checkbox" name="ingredients" value="{{ ingredient.id }}" {% if recipe and ingredient.id in recipe.ingredient_ids %}checked{% endif %}>
+                        {{ ingredient.nombre }}
+                    </label>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">{{ 'Actualizar' if recipe else 'Guardar' }} Receta</button>
+        </form>
+    </div>
+{% endblock %}
