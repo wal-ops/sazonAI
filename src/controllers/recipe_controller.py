@@ -20,30 +20,31 @@ def get_random_tip():
 
 
 # RUTA PARA LEER TODAS LAS RECETAS (READ)
-@recipes_bp.route("/dashboard")
+@recipes_bp.route('/dashboard')
 def dashboard():
-    conn = get_db_connection()
-    cur = conn.cursor()
-    # Usamos JOIN para obtener también el nombre del autor de la receta
-    cur.execute(
-        """
-        SELECT r.id, r.nombre, r.descripcion, u.nombre as autor
-        FROM recetas r
-        LEFT JOIN usuarios u ON r.id_usuario = u.id
-        ORDER BY r.fecha_creacion DESC;
-    """
-    )
-    recipes_raw = cur.fetchall()
-    cur.close()
-    conn.close()
+    conn = get_db() # Obtiene la conexión para esta petición
+    if conn is None:
+        flash('Error de conexión con la base de datos.', 'danger')
+        return render_template('dashboard.html', recipes=[])
 
-    # Convertimos los resultados a una lista de diccionarios
-    recipes = [
-        {"id": r[0], "nombre": r[1], "descripcion": r[2], "autor": r[3]}
-        for r in recipes_raw
-    ]
-
-    return render_template("dashboard.html", recipes=recipes, consejo=get_random_tip())
+    try:
+        cur = conn.cursor()
+        # Tu lógica de consulta SQL...
+        cur.execute("""
+            SELECT r.id, r.nombre, r.descripcion, r.instrucciones, r.categoria,
+                   STRING_AGG(i.nombre, ', ') AS ingredientes
+            FROM recetas r
+            LEFT JOIN receta_ingredientes ri ON r.id = ri.receta_id
+            LEFT JOIN ingredientes i ON ri.ingrediente_id = i.id
+            GROUP BY r.id
+            ORDER BY r.nombre
+        """)
+        recipes = cur.fetchall()
+        cur.close()
+        return render_template('dashboard.html', recipes=recipes)
+    except Exception as e:
+        flash(f'Ocurrió un error al cargar las recetas: {e}', 'danger')
+        return render_template('dashboard.html', recipes=[])
 
 
 # RUTAS PARA AÑADIR UNA NUEVA RECETA (CREATE)
