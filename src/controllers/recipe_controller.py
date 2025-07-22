@@ -1,6 +1,6 @@
 import random
 from flask import Blueprint, render_template, request, redirect, url_for
-from config.database import get_db_connection
+from config.database import get_db
 
 # Creamos un "Blueprint", que es como un mini-app para organizar rutas.
 recipes_bp = Blueprint("recipes", __name__)
@@ -50,7 +50,7 @@ def dashboard():
 # RUTAS PARA AÑADIR UNA NUEVA RECETA (CREATE)
 @recipes_bp.route("/recipe/add", methods=["GET", "POST"])
 def add_recipe():
-    conn = get_db_connection()
+    conn = get_db()
     cur = conn.cursor()
 
     if request.method == "POST":
@@ -99,7 +99,7 @@ def add_recipe():
 # RUTAS PARA EDITAR UNA RECETA (UPDATE)
 @recipes_bp.route("/recipe/edit/<int:id>", methods=["GET", "POST"])
 def edit_recipe(id):
-    conn = get_db_connection()
+    conn = get_db()
     cur = conn.cursor()
 
     if request.method == "POST":
@@ -161,7 +161,7 @@ def edit_recipe(id):
 # RUTA PARA BORRAR UNA RECETA (DELETE)
 @recipes_bp.route("/recipe/delete/<int:id>", methods=["POST"])
 def delete_recipe(id):
-    conn = get_db_connection()
+    conn = get_db()
     cur = conn.cursor()
     # Gracias al 'ON DELETE CASCADE' en la BD, al borrar la receta,
     # también se borrarán sus entradas en 'recetas_ingredientes'.
@@ -175,7 +175,7 @@ def delete_recipe(id):
 # RUTA PARA VER UNA SOLA RECETA (READ ONE)
 @recipes_bp.route("/recipe/<int:id>")
 def view_recipe(id):
-    conn = get_db_connection()
+    conn = get_db()
     cur = conn.cursor()
 
     # Consulta para obtener los detalles de la receta y el nombre del autor
