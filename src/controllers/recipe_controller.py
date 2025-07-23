@@ -14,10 +14,8 @@ chef_tips = [
     "Deja que la carne descanse unos minutos después de cocinarla antes de cortarla.",
 ]
 
-
 def get_random_tip():
     return random.choice(chef_tips)
-
 
 # RUTA PARA LEER TODAS LAS RECETAS (READ)
 @recipes_bp.route('/dashboard')
@@ -41,7 +39,7 @@ def dashboard():
         """)
         recipes = cur.fetchall()
         cur.close()
-        return render_template('dashboard.html', recipes=recipes)
+        return render_template('dashboard.html', recipes=recipes, consejo=get_random_tip())
     except Exception as e:
         flash(f'Ocurrió un error al cargar las recetas: {e}', 'danger')
         return render_template('dashboard.html', recipes=[])
